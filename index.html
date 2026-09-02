@@ -1,0 +1,302 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Calculadora de finiquito y liquidación · Solestra</title>
+<meta name="description" content="Comparativo de finiquito, rescisión y liquidación conforme a la Ley Federal del Trabajo, con determinación del ISR. Solestra Consultores MX.">
+<meta name="theme-color" content="#20204A">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="icons/icon-192.png">
+<link rel="apple-touch-icon" href="icons/icon-192.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Newsreader:opsz,wght@6..72,400;6..72,600&family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap">
+<link rel="stylesheet" href="assets/app.css">
+</head>
+<body>
+<div class="wrap">
+  <header class="top">
+    <div class="idbrand">
+      <img class="logo-light" src="assets/logo.png" alt="Solestra Consultores">
+      <img class="logo-dark" src="assets/logo-dark.png" alt="Solestra Consultores">
+      <span class="rule"></span>
+      <div>
+        <div class="kicker">Ley Federal del Trabajo · LISR</div>
+        <h1 class="brandmark">Finiquito, rescisión y <span>liquidación</span></h1>
+      </div>
+    </div>
+    <div class="paramstrip" id="paramstrip"></div>
+  </header>
+
+  <div class="grid">
+    <!-- ================= FORM ================= -->
+    <aside>
+      <section class="panel">
+        <h2>Parámetros del cálculo</h2>
+        <div class="panel-body">
+          <div class="field">
+            <label>Ejercicio fiscal</label>
+            <select id="ejercicio"></select>
+            <span class="hint">UMA, salario mínimo y tarifa del art. 96 del ejercicio elegido.</span>
+          </div>
+          <div class="field">
+            <label>Área geográfica (tope art. 162)</label>
+            <select id="zona">
+              <option value="general">Resto del país</option>
+              <option value="frontera">Zona Libre Frontera Norte</option>
+            </select>
+          </div>
+        </div>
+      </section>
+
+      <section class="panel">
+        <h2>Identificación del asunto</h2>
+        <div class="panel-body">
+          <div class="field">
+            <label>Trabajador</label>
+            <input type="text" class="idfield" id="idTrabajador" placeholder="Nombre completo">
+          </div>
+          <div class="field">
+            <label>Patrón</label>
+            <input type="text" class="idfield" id="idPatron" placeholder="Razón social">
+          </div>
+          <div class="field">
+            <label>Expediente o referencia</label>
+            <input type="text" class="idfield" id="idExpediente" placeholder="Interno">
+          </div>
+        </div>
+      </section>
+
+      <section class="panel">
+        <h2>Datos del trabajador</h2>
+        <div class="panel-body">
+          <div class="row2">
+            <div class="field">
+              <label>Sueldo mensual fijo</label>
+              <input type="number" id="sueldo" step="0.01" min="0">
+            </div>
+            <div class="field">
+              <label>Variable mensual</label>
+              <input type="number" id="variable" step="0.01" min="0">
+              <span class="hint">Comisiones o bonos (art. 89 LFT). 0 si no aplica.</span>
+            </div>
+          </div>
+          <div class="row2">
+            <div class="field">
+              <label>Fecha de ingreso</label>
+              <input type="date" id="ingreso">
+            </div>
+            <div class="field">
+              <label>Fecha de baja</label>
+              <input type="date" id="baja">
+            </div>
+          </div>
+          <button type="button" class="linkbtn" id="btnRecalc">Recalcular días desde las fechas</button>
+        </div>
+      </section>
+
+      <section class="panel">
+        <h2>Días devengados <span style="text-transform:none;letter-spacing:0;font-weight:400">— editables</span></h2>
+        <div class="panel-body">
+          <div class="row2">
+            <div class="field">
+              <label>Aguinaldo (días)</label>
+              <input type="number" id="dAguinaldo" step="0.000001" min="0">
+              <span class="hint">Proporcional del año en curso (art. 87).</span>
+            </div>
+            <div class="field">
+              <label>Vacaciones prop. (días)</label>
+              <input type="number" id="dVacProp" step="0.000001" min="0">
+              <span class="hint">Del año aniversario en curso (art. 76).</span>
+            </div>
+          </div>
+          <div class="row2">
+            <div class="field">
+              <label>Adeudo vacaciones (días)</label>
+              <input type="number" id="dVacAdeudo" step="0.01" min="0">
+              <span class="hint">Años previos no gozados.</span>
+            </div>
+            <div class="field">
+              <label>Salarios pendientes (días)</label>
+              <input type="number" id="dSalarios" step="0.01" min="0">
+            </div>
+          </div>
+          <div class="row2">
+            <div class="field">
+              <label>Años p/ prima antigüedad</label>
+              <input type="number" id="aniosPrima" step="0.000001" min="0">
+            </div>
+            <div class="field">
+              <label>Prima vacacional</label>
+              <input type="number" id="pctPrima" step="1" min="0">
+              <span class="hint">% sobre vacaciones (art. 80, mínimo 25).</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="panel">
+        <h2>Escenarios de negociación</h2>
+        <div class="panel-body">
+          <div class="row3">
+            <div class="field"><label>Gratif. A</label><input type="number" id="gratA" step="1" min="0"></div>
+            <div class="field"><label>Gratif. B</label><input type="number" id="gratB" step="1" min="0"></div>
+            <div class="field"><label>Indemniz.</label><input type="number" id="gratC" step="1" min="0"></div>
+          </div>
+          <span class="hint" style="margin-top:-4px">Días. La tercera columna se paga como indemnización constitucional (3 meses, art. 48 y 50 fr. III).</span>
+          <div class="field">
+            <label>Base de las indemnizaciones</label>
+            <div class="seg" id="segBase">
+              <button type="button" data-v="sd">Salario diario</button>
+              <button type="button" data-v="sdi">Salario diario integrado</button>
+            </div>
+            <span class="hint">El SDI es la base correcta conforme al art. 84 LFT; el salario diario simple replica hojas de cálculo tradicionales.</span>
+          </div>
+          <label class="check"><input type="checkbox" id="chkPrimaRenuncia"><span>Incluir prima de antigüedad en el finiquito (procede en renuncia con 15 años o más, art. 162 fr. III)</span></label>
+          <label class="check"><input type="checkbox" id="chkJuicio"><span>Agregar escenario de condena en juicio</span></label>
+          <div class="sub" id="juicioBox" hidden>
+            <label class="check"><input type="checkbox" id="chk20"><span>20 días por año (art. 50 fr. II)</span></label>
+            <div class="field">
+              <label>Salarios caídos (meses)</label>
+              <input type="number" id="mesesCaidos" step="1" min="0" max="12">
+              <span class="hint">Tope de 12 meses (art. 48).</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <details class="panel adv">
+        <summary>Criterios avanzados</summary>
+        <div class="panel-body">
+          <div class="field">
+            <label>Último sueldo mensual ordinario</label>
+            <input type="number" id="mesOrdinario" step="0.01" min="0">
+            <span class="hint">Base de la tasa del art. 174 RLISR. Se propone salario diario × 365/12.</span>
+          </div>
+          <label class="check"><input type="checkbox" id="chkExencion"><span>Aplicar exención de 90 UMA por año de servicio a los conceptos de separación (art. 93 fr. XIII LISR)</span></label>
+          <label class="check"><input type="checkbox" id="chkGratSep"><span>Gravar la gratificación como indemnización por separación en lugar de ingreso ordinario</span></label>
+          <div class="field">
+            <label>Otras deducciones</label>
+            <input type="number" id="otras" step="0.01" min="0">
+            <span class="hint">Infonavit, Fonacot, préstamos o faltantes por descontar del neto.</span>
+          </div>
+        </div>
+      </details>
+
+      <section class="panel">
+        <h2>Casos guardados <span class="badge" id="contadorCasos"></span></h2>
+        <div class="panel-body">
+          <button type="button" class="btn" id="btnGuardarCaso">Guardar este caso</button>
+          <div id="listaCasos"></div>
+        </div>
+      </section>
+    </aside>
+
+    <!-- ================= RESULTS ================= -->
+    <main>
+      <dl class="bases" id="bases"></dl>
+
+      <section class="tablecard">
+        <div class="tablehead">
+          <div>
+            <h2>Comparativo de escenarios</h2>
+            <p id="tableSubtitle"></p>
+          </div>
+          <div style="display:flex; gap:8px">
+            <button type="button" class="btn" id="btnCaso">Reproducir tabla 2025</button>
+            <button type="button" class="btn" id="btnCopy">Copiar tabla</button>
+            <button type="button" class="btn" id="btnImprimir">Imprimir</button>
+            <button type="button" class="btn primary" id="btnPrint">Descargar cédula PDF</button>
+          </div>
+        </div>
+        <div class="caseline" id="caseline" hidden></div>
+        <div class="scroller">
+          <table id="tabla">
+            <thead><tr id="thr"></tr></thead>
+            <tbody id="tbody"></tbody>
+          </table>
+        </div>
+      </section>
+
+      <p class="printnote"><b>Descargar cédula PDF</b> arma el documento membretado de Solestra y lo baja a tu equipo.
+      <b>Imprimir</b> abre el diálogo del navegador con esta misma vista en horizontal, por si prefieres papel.
+      <b>Copiar tabla</b> pega con formato en Word y como celdas en Excel.</p>
+
+      <div id="flagbox"></div>
+
+      <section class="cols">
+        <div class="panel">
+          <h2 id="desgloseTitulo">Desglose de percepciones</h2>
+          <div class="panel-body"><div class="ledger" id="ledgerPerc"></div></div>
+        </div>
+        <div class="panel">
+          <h2>Determinación del ISR</h2>
+          <div class="panel-body">
+            <div class="ledger" id="ledgerIsr"></div>
+            <div class="netbar"><span id="netLabel">Neto a pagar</span><span id="netValue"></span></div>
+          </div>
+        </div>
+      </section>
+
+      <section class="notes">
+        <div class="panel">
+          <h2>Datos que se requieren</h2>
+          <div class="panel-body">
+            <ul>
+              <h4>Indispensables</h4>
+              <li class="req">Sueldo mensual fijo del contrato.</li>
+              <li class="req">Fecha de ingreso y fecha de baja.</li>
+              <li class="req">Días de vacaciones pendientes de años anteriores, del control de vacaciones.</li>
+              <li class="req">Días de salario devengados y no pagados al corte.</li>
+              <h4>Afinan el cálculo</h4>
+              <li class="req">Promedio mensual de comisiones, bonos y gratificaciones (art. 89 LFT).</li>
+              <li class="req">Prestaciones superiores a la ley: días de aguinaldo y porcentaje de prima vacacional pactados.</li>
+              <li class="req">Área geográfica del centro de trabajo, que fija el tope del art. 162.</li>
+              <li class="req">Último sueldo mensual ordinario efectivamente pagado.</li>
+              <li class="req">Descuentos vigentes: Infonavit, Fonacot, préstamos o faltantes.</li>
+              <h4>Si hay litigio</h4>
+              <li class="req">Fecha de la separación y de presentación de la demanda.</li>
+              <li class="req">Si se reclama reinstalación o indemnización constitucional.</li>
+            </ul>
+          </div>
+        </div>
+        <div class="panel">
+          <h2>Fundamento de cada concepto</h2>
+          <div class="panel-body">
+            <ul>
+              <li><b>Aguinaldo.</b> 15 días mínimo, proporcional a los días trabajados del año calendario (art. 87 LFT).</li>
+              <li><b>Vacaciones.</b> Tabla de Vacaciones Dignas: 12 días el primer año, +2 por año hasta 20 al quinto, y +2 por cada cinco años (art. 76). Las no gozadas se pagan al término (art. 79).</li>
+              <li><b>Prima vacacional.</b> 25% mínimo sobre el salario de los días de vacaciones (art. 80).</li>
+              <li><b>Prima de antigüedad.</b> 12 días por año de servicio, con salario topado a dos veces el mínimo del área (art. 162). En separación voluntaria sólo procede con 15 años o más.</li>
+              <li><b>Indemnización constitucional.</b> Tres meses de salario integrado (art. 48 y 50 fr. III).</li>
+              <li><b>Gratificación.</b> No es prestación legal: es la cantidad que se negocia para cerrar el convenio.</li>
+            </ul>
+          </div>
+        </div>
+        <div class="panel">
+          <h2>Método fiscal aplicado</h2>
+          <div class="panel-body">
+            <ul id="notasFiscales"></ul>
+          </div>
+        </div>
+      </section>
+
+      <footer class="disc" id="disclaimer"></footer>
+      <div class="firma">
+        <img class="logo-light" src="assets/logo.png" alt="Solestra Consultores">
+        <img class="logo-dark" src="assets/logo-dark.png" alt="Solestra Consultores">
+        <span>SOLESTRA CONSULTORES MX, S.C. · Herramienta de cálculo de uso interno · Lic. Luis Rodrigo Aguilar</span>
+        <span class="onlyprint">Calle Sirio #2912, Colonia Rinconada Sur Oriente, Puebla, Puebla, C.P. 72193 · Teléfono 222 413 9231</span>
+      </div>
+    </main>
+  </div>
+</div>
+<div class="toast" id="toast">Tabla copiada</div>
+<script src="data/parametros.js"></script>
+<script src="vendor/jspdf.umd.min.js"></script>
+<script src="vendor/jspdf.plugin.autotable.min.js"></script>
+<script src="assets/cedula-pdf.js"></script>
+<script src="assets/app.js"></script>
+</body>
+</html>
