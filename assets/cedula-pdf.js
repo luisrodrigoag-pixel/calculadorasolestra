@@ -64,8 +64,8 @@
 
     function membrete() {
       if (logo) {
-        const w = 46, h = w * logo.naturalHeight / logo.naturalWidth;
-        doc.addImage(logo, "PNG", W - M.right - w, 13, w, h);
+        const w = 25, h = w * logo.naturalHeight / logo.naturalWidth;
+        doc.addImage(logo, "PNG", W - M.right - w, 9, w, h);
       }
       doc.setFillColor(...MARCA.verde);
       doc.rect(0, H - 24, W * 0.42, 2.2, "F");

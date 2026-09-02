@@ -50,7 +50,7 @@ header.top{
 }
 .brandmark span{color:var(--accent)}
 .idbrand{display:flex; align-items:center; gap:16px}
-.idbrand img{height:44px; width:auto; display:block}
+.idbrand img{height:66px; width:auto; display:block}
 .idbrand .rule{width:1px; align-self:stretch; background:var(--line-strong); margin:2px 0}
 img.logo-dark{display:none}
 @media (prefers-color-scheme:dark){
@@ -59,7 +59,7 @@ img.logo-dark{display:none}
 }
 :root[data-theme="dark"] img.logo-light{display:none}
 :root[data-theme="dark"] img.logo-dark{display:block}
-@media (max-width:560px){ .idbrand img{height:34px} .brandmark{font-size:23px} }
+@media (max-width:560px){ .idbrand img{height:48px} .brandmark{font-size:22px} }
 .caseline{
   display:flex; flex-wrap:wrap; gap:4px 18px; padding:0 16px 12px;
   font-size:11.5px; color:var(--ink-2); border-bottom:1px solid var(--line); margin-bottom:0;
@@ -71,7 +71,7 @@ input[type=text].idfield{font-family:"IBM Plex Sans",sans-serif; font-weight:500
   display:flex; flex-wrap:wrap; align-items:center; gap:10px 14px;
   font-size:11px; color:var(--ink-3);
 }
-.firma img{height:26px; width:auto; opacity:.9}
+.firma img{height:40px; width:auto; opacity:.9}
 .kicker{
   font-size:10.5px; font-weight:600; letter-spacing:.14em; text-transform:uppercase;
   color:var(--ink-3); margin-bottom:6px;
@@ -263,7 +263,7 @@ footer.disc{margin-top:26px; padding-top:14px; border-top:1px solid var(--line);
   .grid{ display:block }
   header.top{ padding-bottom:10px; margin-bottom:12px; border-bottom-width:1.5px }
   .brandmark{ font-size:20px }
-  .idbrand img{ height:34px }
+  .idbrand img{ height:50px }
   img.logo-dark{ display:none !important }
   img.logo-light{ display:block !important }
   .panel, .tablecard, .bases, .flag{ box-shadow:none; border-color:var(--line-strong); break-inside:avoid }
@@ -283,7 +283,7 @@ footer.disc{margin-top:26px; padding-top:14px; border-top:1px solid var(--line);
   .notes{ grid-template-columns:1fr 1fr; margin-top:12px }
   .onlyprint{ display:block; width:100%; font-size:9.5px }
   .firma{ margin-top:12px }
-  .firma img{ height:20px }
+  .firma img{ height:32px }
   #btnCaso, #btnCopy, #btnPrint, .toast{ display:none !important }
 }
 
